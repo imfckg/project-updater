@@ -9,7 +9,6 @@ from .logging import setup_debug_loggers
 
 WELCOME_MESSAGE: Final[str] = f'PROJECT UPDATER v{__version__}'
 
-
 def main():
     print(WELCOME_MESSAGE)
     if os.getenv('DEBUG'):
