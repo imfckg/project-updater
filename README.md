@@ -1,2 +1,3 @@
-# project-updater
+# PROJECT-UPDATER 
+
 Git project updater
