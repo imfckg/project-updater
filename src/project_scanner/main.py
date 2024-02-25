@@ -35,7 +35,7 @@ class GitProjectScanner:
 
     def __next__(self) -> str:
         if not self.found_directories:
-            self.scan(self.path, self.current_depth)
+            self.scan(self.path, self.depth)
         if self.iterator_position < len(self.found_directories):
             result = self.found_directories[self.iterator_position]
             self.iterator_position += 1

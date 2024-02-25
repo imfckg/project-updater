@@ -18,11 +18,17 @@ project-scanner = "project_scanner.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+coverage = "^7.4.3"
 
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.2.2"
 mypy = "^1.8.0"
+
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.4.3"
+pytest = "^8.0.2"
 
 [build-system]
 requires = ["poetry-core"]
