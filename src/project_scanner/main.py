@@ -4,6 +4,20 @@ from typing import Iterator, Final
 
 
 class GitProjectScanner:
+    __slots__ = (
+        'path',
+        'depth',
+        'current_depth',
+        'found_directories',
+        'iterator_position',
+    )
+
+    path: Path
+    depth: int
+    current_depth: int
+    found_directories: list[str]
+    iterator_position: int
+
     DEFAULT_DEPTH: Final[int] = 3
 
     def __init__(self, path: Path, depth: int = DEFAULT_DEPTH):
@@ -21,7 +35,7 @@ class GitProjectScanner:
 
     def __next__(self) -> str:
         if not self.found_directories:
-            self.__search(self.path, self.current_depth)
+            self.scan(self.path, self.current_depth)
         if self.iterator_position < len(self.found_directories):
             result = self.found_directories[self.iterator_position]
             self.iterator_position += 1
@@ -29,24 +43,28 @@ class GitProjectScanner:
         else:
             raise StopIteration
 
-    def __search(self, current_path: Path, current_depth: int):
+    def scan(self, current_path: Path, current_depth: int) -> list[str]:
+        """
+        Осуществляет поиск вложенных Git проектов в заданном каталоге.
+
+        :param current_path: Путь к текущему каталогу
+        :param current_depth: глубина поиска
+        """
         if current_depth > 0:
+            if '.git' in os.listdir(current_path):
+                self.found_directories.append(str(current_path))
             for entry in os.listdir(current_path):
                 entry_path = current_path / entry
                 if entry_path.is_dir():
-                    if entry == '.git':
-                        self.found_directories.append(str(current_path))
-                        break
-                    else:
-                        self.__search(entry_path, current_depth - 1)
+                    self.scan(entry_path, current_depth - 1)
+        return self.found_directories
 
 
 def main():
-    # Пример использования
-    path_to_search = Path('/Users/im/GitHub/imfckg/')
-    depth_to_search = 3
+    for directory in GitProjectScanner(Path('/Users/im/GitHub/')):
+        print(directory)
 
-    git_scanner = GitProjectScanner(path_to_search, depth_to_search)
-    print('Список папок с подпапкой .git:')
-    for directory in git_scanner:
+
+if __name__ == '__main__':
+    for directory in GitProjectScanner(Path('/Users/im/GitHub/')):
         print(directory)
