@@ -1,3 +1,5 @@
+from sys import platform
+
 import pytest
 
 from project_scanner.main import GitProjectScanner
@@ -34,6 +36,24 @@ class TestGitProjectScanner:
 
     def test_scan_multiple_directories(self, tmp_path):
         # Arrange
+        match platform:
+            case 'win32':
+                expected_result = [
+                    str(tmp_path),
+                    str(tmp_path / 'dir1'),
+                    str(tmp_path / 'dir2'),
+                    str(tmp_path / 'dir3'),
+                ]
+            case 'linux' | 'darwin':
+                expected_result = [
+                    str(tmp_path),
+                    str(tmp_path / 'dir2'),
+                    str(tmp_path / 'dir3'),
+                    str(tmp_path / 'dir1'),
+                ]
+            case _:
+                raise ValueError(f'Unsupported platform: {platform}')
+
         dir1 = tmp_path / 'dir1' / '.git'
         dir2 = tmp_path / 'dir2' / '.git'
         dir3 = tmp_path / 'dir3' / '.git'
@@ -43,12 +63,6 @@ class TestGitProjectScanner:
         dir2.mkdir(parents=True)
         dir3.mkdir(parents=True)
         scanner = GitProjectScanner(tmp_path)
-        expected_result = [
-            str(tmp_path),
-            str(tmp_path / 'dir1'),
-            str(tmp_path / 'dir2'),
-            str(tmp_path / 'dir3'),
-        ]
         # Act
         result = list(scanner)
         # Assert
