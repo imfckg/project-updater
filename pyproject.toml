@@ -1,24 +1,35 @@
 [tool.poetry]
 name = "project-updater"
-version = "0.1.0"
+version = "0.1.1"
 description = "Git project updater"
 authors = ["Ivan Migunov <im@fckg.ru>"]
 readme = "README.md"
-packages = [{include = "project_updater", from = "src"}]
+packages = [
+    { include = "project_updater", from = "src" },
+    { include = "project_scanner", from = "src" },
+]
 include = ["LICENSE"]
 
 [tool.poetry.scripts]
 project-updater = "project_updater:__main__.main"
 project-updater-cli = "project_updater.cli:commands.run"
+project-scanner = "project_scanner.main:main"
 
 
 [tool.poetry.dependencies]
 python = "^3.12"
+coverage = "^7.4.3"
 
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.2.2"
 mypy = "^1.8.0"
+
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.4.3"
+pytest = "^8.0.2"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
