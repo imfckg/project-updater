@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from typing import Iterator
+import argparse
 
 
 class GitProjectScanner:
@@ -33,8 +34,12 @@ class GitProjectScanner:
                     yield from self.scan(entry_path, current_depth - 1)
 
 
-def main(path: str):
-    for directory in GitProjectScanner(Path(path)):
+def main():
+    parser = argparse.ArgumentParser(description='project-scanner')
+    parser.add_argument('path', type=str, help='path to scan projects')
+
+    args = parser.parse_args()
+    for directory in GitProjectScanner(Path(args.path)):
         print(directory)
 
 
