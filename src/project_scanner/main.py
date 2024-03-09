@@ -1,7 +1,7 @@
-from pathlib import Path
-import os
-from typing import Iterator
 import argparse
+import os
+from pathlib import Path
+from typing import Iterator
 
 
 class GitProjectScanner:
@@ -26,7 +26,7 @@ class GitProjectScanner:
         :param current_depth: глубина поиска
         """
         if current_depth > 0:
-            if '.git' in os.listdir(current_path):
+            if ".git" in os.listdir(current_path):
                 yield str(current_path)
             for entry in os.listdir(current_path):
                 entry_path = current_path / entry
@@ -35,13 +35,13 @@ class GitProjectScanner:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='project-scanner')
-    parser.add_argument('path', type=str, help='path to scan projects')
+    parser = argparse.ArgumentParser(description="project-scanner")
+    parser.add_argument("path", type=str, help="path to scan projects")
 
     args = parser.parse_args()
     for directory in GitProjectScanner(Path(args.path)):
         print(directory)
 
 
-if __name__ == '__main__':
-    main('.')
+if __name__ == "__main__":
+    main()
